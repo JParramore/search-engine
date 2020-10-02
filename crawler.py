@@ -37,7 +37,6 @@ def process_urls():
         # move url from the queue to processed url set
         url = new_urls.popleft()
         unique_urls.add(url)
-        # print the current url
         print('Processing %s' % url)
         try:
             response = requests.get(url)
