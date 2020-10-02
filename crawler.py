@@ -40,6 +40,16 @@ def process_urls():
             broken_urls.add(url)
             continue
 
+        base_obj = extract_base(url)
 
+# extract base url to resolve relative links
+def extract_base(url):
+    parts = urlsplit(url)
+    base = '{0.netloc}'.format(parts) # https://docs.python.org/3/library/urllib.parse.html#urllib.parse.urlsplit
+    return {
+            'strip_base' : base.replace('www.', ''),
+            'base_url' : '{0.scheme}://{0.netloc}'.format(parts), 
+            'path' : url[:url.rfind('/')+1] if '/' in parts.path else url
+            }
 
 process_urls()
