@@ -13,6 +13,12 @@ class Page:
 
 new_urls = deque([])
 
+# load urls from seed file
+stream = open("seed.yaml", 'r')
+seeds = yaml.safe_load(stream)['seed-urls']
+# queue all seed urls
+[ new_urls.append(url) for url in seeds ]
+
 # processed urls
 unique_urls = set()
 
@@ -27,14 +33,6 @@ broken_urls = set()
 
 # process urls one by one until we exhaust the queue
 def process_urls():
-
-    # load urls from seed file
-    stream = open("seed.yaml", 'r')
-    seeds = yaml.safe_load(stream)['seed-urls']
-
-    # queue all seed urls
-    [ new_urls.append(url) for url in seeds ]
-
     while len(new_urls):
         # move url from the queue to processed url set
         url = new_urls.popleft()
