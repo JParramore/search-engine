@@ -63,7 +63,6 @@ def scrape_url_for_links(base, response):
     path=base['path']
 
     for link in soup.find_all('a'): 
-    
         # extract link url from the anchor
         anchor = link.attrs['href'] if 'href' in link.attrs else ''
         if anchor.startswith('/'):
