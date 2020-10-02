@@ -56,7 +56,6 @@ def process_urls():
 def scrape_url_for_links(base, response):
     
     soup = BeautifulSoup(response.text, 'lxml')
-
     #print(soup.get_text()) # print the page's text too
 
     base_url=base['base_url']
