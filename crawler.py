@@ -6,6 +6,11 @@ from urllib.parse import urlparse
 from collections import deque
 import yaml
 
+class Page:
+  def __init__(self, url, text):
+    self.url = url
+    self.text = text
+
 new_urls = deque([])
 
 # processed urls
