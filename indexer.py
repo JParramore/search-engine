@@ -4,9 +4,8 @@ from db.session import get_session
 
 def add(url, title, text):
     '''
-    Add this page to our index. Do this by creating a page, adding any new
-    words as well as their locations on the page. If the page already
-    exists in our index, presume it is stale.
+    Add a page to our index. Add any new words as well as their locations
+    on the page. If the page already exists in our index, presume it is stale.
     '''
     session = get_session()
     page_service = PageService(session)
