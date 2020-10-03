@@ -1,35 +1,37 @@
-from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, ForeignKey, String, DateTime
-from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
-from sqlalchemy.ext.declarative import declarative_base
-
-Base = declarative_base()
+from db.services import PageService, LocationService, WordService
+from db.session import get_session
 
 
-class Page(Base):
-    __tablename__ = 'page'
-    created_at = Column(DateTime(timezone=True), default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
-    id = Column(Integer, primary_key=True)
-    url = Column(String())
-    title = Column(String())
-    locations = relationship("Location")
+def add(url, title, text):
+    '''
+    Add this page to our index. Do this by creating a page, adding any new
+    words as well as their locations on the page. If the page already
+    exists in our index, presume it is stale.
+    '''
+    session = get_session()
+    page_service = PageService(session)
+    location_service = LocationService(session)
+    word_service = WordService(session)
 
+    existing_page = page_service.find(url=url)
+    if existing_page:
+        # we've seen this page before, keep it up to date by:
+        # removing its locations
+        location_service.clean_up(existing_page)
+        location_service.save()
+        page = existing_page
+    else:
+        page = page_service.new(url=url, title=title)
 
-class Location(Base):
-    __tablename__ = 'location'
-    id = Column(Integer, primary_key=True)
-    position = Column(String())
-    word_id = Column(Integer, ForeignKey('word.id'))
-    page_id = Column(Integer, ForeignKey('page.id'))
+    for index, stem in enumerate(text.split()):
+        word = word_service.find(stem=stem)
+        if not word:
+            word = word_service.new(stem=stem)
+        location = location_service.new(position=index)
+        word.locations.append(location)
+        page.locations.append(location)
 
+        word_service.save()
+        location_service.save()
+    page_service.save()
 
-class Word(Base):
-    __tablename__ = 'word'
-    id = Column(Integer, primary_key=True)
-    stem = Column(String())
-    locations = relationship("Location")
-
-
-engine = create_engine('sqlite:///db.sqlite', echo=True)
