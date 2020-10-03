@@ -11,7 +11,7 @@ import yaml
 #         self.url = url
 #         self.text = text
 
-
+DO_NOT_CRAWL_TYPES = set(['.pdf', '.doc', '.xls', '.ppt', '.mp3' '.m4v' '.avi' '.mpg' '.rss', '.xml', '.json', '.txt', '.git', '.zip', '.md5', '.asc', '.jpg', '.gif', '.png'])
 
 def stream_seeds_into_queue():
 
@@ -52,10 +52,8 @@ def process_urls(new_urls):
         for i in internal_urls:
             if not i in new_urls and not i in unique_urls:
                 new_urls.append(i)
-
+    
     print(pages)
-    print(unique_urls)
-
 
 def scrape_url_for_links(base, soup):
 
@@ -73,7 +71,7 @@ def scrape_url_for_links(base, soup):
     for link in soup.find_all('a'):
         # extract link url from the anchor
 
-        if 'href' in link.attrs and not link.attrs['href'].startswith('mailto:'):
+        if 'href' in link.attrs and not link.attrs['href'].startswith('mailto:') and not link.attrs['href'][-4:len(link.attrs['href'])] in DO_NOT_CRAWL_TYPES:
             anchor = link.attrs['href']
         else:
             anchor = ''
