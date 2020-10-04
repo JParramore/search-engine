@@ -28,6 +28,7 @@ class LocationService(ModelServiceBase):
         ModelServiceBase.__init__(self, Location, session)
 
     def clean_up(self, page):
+        # TODO: can this cause dangling words?
         self.session.query(self.model).filter(
             self.model.page_id == page.id).delete()
 
