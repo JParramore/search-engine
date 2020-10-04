@@ -33,4 +33,3 @@ def add(url, title, text):
         word_service.save()
         location_service.save()
     page_service.save()
-
