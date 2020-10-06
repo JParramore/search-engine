@@ -6,11 +6,6 @@ from urllib.parse import urlparse
 from collections import deque
 import yaml
 
-# class Page:
-#     def __init__(self, url, text):
-#         self.url = url
-#         self.text = text
-
 DO_NOT_CRAWL_TYPES = set(['.pdf', '.doc', '.xls', '.ppt', '.mp3' '.m4v' '.avi' '.mpg' '.rss', '.xml', '.json', '.txt', '.git', '.zip', '.md5', '.asc', '.jpg', '.gif', '.png'])
 
 def stream_seeds_into_queue():
@@ -23,8 +18,6 @@ def stream_seeds_into_queue():
     process_urls(new_urls)
 
 # process urls one by one until we exhaust the queue
-
-
 def process_urls(new_urls):
 
     pages = {}
