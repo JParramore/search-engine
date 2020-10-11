@@ -11,15 +11,14 @@ DO_NOT_CRAWL_TYPES = set(['.pdf', '.doc', '.xls', '.ppt', '.mp3' '.m4v' '.avi' '
 
 SEED_PATH = "seed.yaml"
 
+
 def stream_seeds_into_queue(seed_path):
 
     new_urls = deque([])
-    stream = open(seed_path, 'r')
-    seeds = yaml.safe_load(stream)['seed-urls']
-
-    [new_urls.append(url) for url in seeds]
-
-    process_urls(new_urls)
+    with open(seed_path, 'r') as stream:
+        seeds = yaml.safe_load(stream)['seed-urls']
+        [new_urls.append(url) for url in seeds]
+        process_urls(new_urls)
 
 
 # process urls one by one until we exhaust the queue
@@ -40,7 +39,6 @@ def process_urls(new_urls):
             broken_urls.add(url)
             continue
 
-        response = requests.get(url)
         soup = BeautifulSoup(response.text, 'lxml')
         pages[url] = soup.get_text()
 
@@ -87,10 +85,10 @@ def scrape_url_for_links(base, soup):
 
 def extract_base(url):
     parts = urlsplit(url)
-    
+
     # https://docs.python.org/3/library/urllib.parse.html#urllib.parse.urlsplit
     base = '{0.netloc}'.format(parts)
-    
+
     path = url[:url.rfind('/')+1] if '/' in parts.path else url
 
     return {

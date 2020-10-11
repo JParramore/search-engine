@@ -1,8 +1,21 @@
 from crawler import extract_base, process_urls, scrape_url_for_links, stream_seeds_into_queue
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import MagicMock, Mock, patch
 from bs4 import BeautifulSoup
 from collections import deque
+
+
+class DotDict(dict):
+    def __getattr__(self, item):
+        if item in self:
+            return self[item]
+        raise AttributeError
+
+    def __setattr__(self, key, value):
+        if key in self:
+            self[key] = value
+            return
+        raise AttributeError
 
 
 class TestCrawlerMethods(unittest.TestCase):
@@ -25,7 +38,8 @@ class TestCrawlerMethods(unittest.TestCase):
     def test_scrape_url_for_links(self):
 
         url = 'https://www.testcase.com/'
-        html_doc = open('tests/data/test.html', 'r', encoding='utf-8').read()
+        with open('tests/data/test.html', 'r', encoding='utf-8') as stream:
+            html_doc = stream.read()
         soup = BeautifulSoup(html_doc, 'lxml')
         base = extract_base(url)
 
@@ -40,9 +54,22 @@ class TestCrawlerMethods(unittest.TestCase):
         self.assertCountEqual(actual_internal_urls, expected_internal_urls)
 
     @patch('crawler.process_urls')
-    def test_stream_seeds_into_queue(self,mock_process_urls):
-        
+    def test_stream_seeds_into_queue(self, mock_process_urls):
+
         test_yaml = 'tests/data/test.yaml'
-        test_yaml_urls = deque(['https://facebook.com','https://google.com','https://www.test.com'])
+        test_yaml_urls = deque(
+            ['https://facebook.com', 'https://google.com', 'https://www.test.com'])
         stream_seeds_into_queue(test_yaml)
         mock_process_urls.assert_called_with(test_yaml_urls)
+
+    @patch('crawler.requests')
+    @patch('crawler.scrape_url_for_links')
+    def test_process_urls(self, mock_scrape_url_for_links, mock_requests):
+
+        test_urls = deque(['https://example.org'])
+
+        mock_requests.get.return_value = DotDict({"text": "<html></html>"})
+
+        process_urls(test_urls)
+
+        mock_requests.get.assert_called_once_with('https://example.org')
