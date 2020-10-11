@@ -6,16 +6,21 @@ from urllib.parse import urlparse
 from collections import deque
 import yaml
 
-DO_NOT_CRAWL_TYPES = set(['.pdf', '.doc', '.xls', '.ppt', '.mp3' '.m4v' '.avi' '.mpg' '.rss', '.xml', '.json', '.txt', '.git', '.zip', '.md5', '.asc', '.jpg', '.gif', '.png'])
+DO_NOT_CRAWL_TYPES = set(['.pdf', '.doc', '.xls', '.ppt', '.mp3' '.m4v' '.avi' '.mpg' '.rss',
+                          '.xml', '.json', '.txt', '.git', '.zip', '.md5', '.asc', '.jpg', '.gif', '.png'])
 
-def stream_seeds_into_queue():
+SEED_PATH = "seed.yaml"
+
+def stream_seeds_into_queue(seed_path):
 
     new_urls = deque([])
-    stream = open("seed.yaml", 'r')
+    stream = open(seed_path, 'r')
     seeds = yaml.safe_load(stream)['seed-urls']
+
     [new_urls.append(url) for url in seeds]
 
     process_urls(new_urls)
+
 
 # process urls one by one until we exhaust the queue
 def process_urls(new_urls):
@@ -45,21 +50,16 @@ def process_urls(new_urls):
         for i in internal_urls:
             if not i in new_urls and not i in unique_urls:
                 new_urls.append(i)
-    
-    print(pages)
+
 
 def scrape_url_for_links(base, soup):
-
 
     internal_urls = set()
     external_urls = set()
 
     base_url = base['base_url']
-    #print('BASE URL: ' + base_url)
     strip_base = base['strip_base']
-    #print('STRIP BASE: ' + strip_base)
     path = base['path']
-    #print('PATH: ' + path)
 
     for link in soup.find_all('a'):
         # extract link url from the anchor
@@ -69,7 +69,6 @@ def scrape_url_for_links(base, soup):
         else:
             anchor = ''
 
-        #print("ANCHOR: " + anchor)
         if anchor.startswith('/'):
             local_link = base_url + anchor
             internal_urls.add(local_link)
@@ -88,9 +87,10 @@ def scrape_url_for_links(base, soup):
 
 def extract_base(url):
     parts = urlsplit(url)
+    
     # https://docs.python.org/3/library/urllib.parse.html#urllib.parse.urlsplit
     base = '{0.netloc}'.format(parts)
-
+    
     path = url[:url.rfind('/')+1] if '/' in parts.path else url
 
     return {
@@ -98,6 +98,3 @@ def extract_base(url):
         'base_url': '{0.scheme}://{0.netloc}'.format(parts),
         'path': path
     }
-
-stream_seeds_into_queue()
-
