@@ -13,7 +13,6 @@ SEED_PATH = "seed.yaml"
 
 
 def stream_seeds_into_queue(seed_path):
-
     new_urls = deque([])
     with open(seed_path, 'r') as stream:
         seeds = yaml.safe_load(stream)['seed-urls']
@@ -23,13 +22,11 @@ def stream_seeds_into_queue(seed_path):
 
 # process urls one by one until we exhaust the queue
 def process_urls(new_urls):
-
     pages = {}
     unique_urls = set()
     broken_urls = set()
 
     while len(new_urls):
-        # move url from the queue to processed url set
         url = new_urls.popleft()
         unique_urls.add(url)
         print('Processing %s' % url)
@@ -51,7 +48,6 @@ def process_urls(new_urls):
 
 
 def scrape_url_for_links(base, soup):
-
     internal_urls = set()
     external_urls = set()
 
@@ -60,8 +56,6 @@ def scrape_url_for_links(base, soup):
     path = base['path']
 
     for link in soup.find_all('a'):
-        # extract link url from the anchor
-
         if 'href' in link.attrs and not link.attrs['href'].startswith('mailto:') and not link.attrs['href'][-4:len(link.attrs['href'])] in DO_NOT_CRAWL_TYPES:
             anchor = link.attrs['href']
         else:
@@ -80,15 +74,13 @@ def scrape_url_for_links(base, soup):
 
     return internal_urls
 
+
 # extract base url to resolve relative links
-
-
 def extract_base(url):
     parts = urlsplit(url)
 
     # https://docs.python.org/3/library/urllib.parse.html#urllib.parse.urlsplit
     base = '{0.netloc}'.format(parts)
-
     path = url[:url.rfind('/')+1] if '/' in parts.path else url
 
     return {
