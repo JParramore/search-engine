@@ -1,0 +1,5 @@
+--- 
+ seed-urls: 
+   - 'https://scrapethissite.com'
+   #- 'https://parramore.dev'
+   #- 'https://webscraper.io'
