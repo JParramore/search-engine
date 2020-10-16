@@ -63,13 +63,9 @@ class TestCrawlerMethods(unittest.TestCase):
         mock_process_urls.assert_called_with(test_yaml_urls)
 
     @patch('crawler.requests')
-    @patch('crawler.scrape_url_for_links')
-    def test_process_urls(self, mock_scrape_url_for_links, mock_requests):
-
+    @patch('crawler.add_to_index')
+    def test_process_urls(self, add_to_index, mock_requests):
         test_urls = deque(['https://example.org'])
-
         mock_requests.get.return_value = DotDict({"text": "<html></html>"})
-
         process_urls(test_urls)
-
         mock_requests.get.assert_called_once_with('https://example.org')

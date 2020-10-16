@@ -2,10 +2,9 @@ from bs4 import BeautifulSoup
 import requests
 import requests.exceptions
 from urllib.parse import urlsplit
-from urllib.parse import urlparse
 from collections import deque
 import yaml
-from indexer import add as add_to_index
+from indexer import add_to_index
 
 DO_NOT_CRAWL_TYPES = set(['.pdf', '.doc', '.xls', '.ppt', '.mp3' '.m4v' '.avi' '.mpg' '.rss',
                           '.xml', '.json', '.txt', '.git', '.zip', '.md5', '.asc', '.jpg', '.gif', '.png'])

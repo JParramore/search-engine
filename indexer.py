@@ -2,7 +2,7 @@ from db.services import PageService, LocationService, WordService
 from db.session import get_session
 
 
-def add(url, title, text, description):
+def add_to_index(url, title, text, description):
     '''
     Add a page to our index. Add any new words as well as their locations
     on the page. If the page already exists in our index, presume it is stale.
