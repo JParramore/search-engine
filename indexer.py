@@ -2,7 +2,7 @@ from db.services import PageService, LocationService, WordService
 from db.session import get_session
 
 
-def add(url, title, text):
+def add(url, title, text, description):
     '''
     Add a page to our index. Add any new words as well as their locations
     on the page. If the page already exists in our index, presume it is stale.
@@ -20,7 +20,7 @@ def add(url, title, text):
         location_service.save()
         page = existing_page
     else:
-        page = page_service.new(url=url, title=title)
+        page = page_service.new(url=url, title=title, description=description)
 
     for index, stem in enumerate(text.split()):
         word = word_service.find(stem=stem)
@@ -29,7 +29,6 @@ def add(url, title, text):
         location = location_service.new(position=index)
         word.locations.append(location)
         page.locations.append(location)
-
-        word_service.save()
-        location_service.save()
+    word_service.save()
+    location_service.save()
     page_service.save()

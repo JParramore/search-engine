@@ -13,6 +13,7 @@ class Page(Base):
     id = Column(Integer, primary_key=True)
     url = Column(String())
     title = Column(String())
+    description = Column(String())
     locations = relationship("Location")
 
 
@@ -27,5 +28,5 @@ class Location(Base):
 class Word(Base):
     __tablename__ = 'word'
     id = Column(Integer, primary_key=True)
-    stem = Column(String())
+    stem = Column(String(), index=True, unique=True)
     locations = relationship("Location")
