@@ -4,16 +4,7 @@ from indexer import add_to_index
 from db.models import Base, Page, Location, Word
 import unittest
 from unittest.mock import MagicMock, patch
-
-
-def get_testing_session():
-    engine = create_engine('sqlite:///:memory:')  # for logging, add echo=True
-    target_metadata = Base.metadata
-    target_metadata.create_all(bind=engine)
-    Session = sessionmaker()
-    Session.configure(bind=engine)
-    return Session()
-
+from setup.session import get_testing_session
 
 class TestIndexerData(unittest.TestCase):
     @patch('indexer.get_session')

@@ -26,7 +26,7 @@ class Word(Base):
 class Location(Base):
     __tablename__ = 'location'
     id = Column(Integer, primary_key=True)
-    position = Column(String())
+    position = Column(Integer)
     word_id = Column(Integer, ForeignKey('word.id'))
     page_id = Column(Integer, ForeignKey('page.id'))
     page = relationship('Page', backref=backref('location'))
