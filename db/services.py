@@ -9,6 +9,9 @@ class ModelServiceBase:
     def find(self, **kwargs):
         return self.session.query(self.model).filter_by(**kwargs).first()
 
+    def find_all(self, **kwargs):
+        return self.session.query(self.model).filter_by(**kwargs).all()
+
     def new(self, **kwargs):
         instance = self.model(**kwargs)
         self.session.add(instance)
