@@ -36,13 +36,15 @@ class TestIndexerData(unittest.TestCase):
         self.assertEqual(page.description, description)
 
         # correct amount of locations
-        self.assertEqual(len(page.locations), 4)
+        locations = mock_session.query(Location).filter_by(page_id = page.id).all()
+        self.assertEqual(len(locations), 4)
 
         # use existing words when necessary
         self.assertEqual(len(words), 3)
 
         # clear up stale locations
-        old_locations = page.locations
+        old_locations = locations
         add_to_index(url, title, text, description)
-        for new_location in mock_session.query(Page).first().locations:
+        locations = mock_session.query(Location).filter_by(page_id = page.id).all()
+        for new_location in locations:
             self.assertNotIn(new_location, old_locations)
