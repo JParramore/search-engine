@@ -26,9 +26,5 @@ def add_to_index(url, title, text, description):
         word = word_service.find(stem=stem)
         if not word:
             word = word_service.new(stem=stem)
-        location = location_service.new(position=index)
-        word.locations.append(location)
-        page.locations.append(location)
-    word_service.save()
-    location_service.save()
+        location = location_service.new(page=page, word=word, position=index)
     page_service.save()
