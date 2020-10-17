@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, ForeignKey, String, DateTime
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql import func
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -14,7 +14,13 @@ class Page(Base):
     url = Column(String())
     title = Column(String())
     description = Column(String())
-    locations = relationship("Location")
+    words = relationship('Word', secondary='location', backref='pages')
+
+
+class Word(Base):
+    __tablename__ = 'word'
+    id = Column(Integer, primary_key=True)
+    stem = Column(String(), index=True, unique=True)
 
 
 class Location(Base):
@@ -23,10 +29,5 @@ class Location(Base):
     position = Column(String())
     word_id = Column(Integer, ForeignKey('word.id'))
     page_id = Column(Integer, ForeignKey('page.id'))
-
-
-class Word(Base):
-    __tablename__ = 'word'
-    id = Column(Integer, primary_key=True)
-    stem = Column(String(), index=True, unique=True)
-    locations = relationship("Location")
+    page = relationship('Page', backref=backref('location'))
+    word = relationship('Word', backref=backref('location'))
