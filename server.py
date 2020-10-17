@@ -13,9 +13,11 @@ def index():
 
 @app.route('/search')
 def search():
-    q = request.args.get('q') or 'test'
-    return q
-    # return jsonify(query(q))
+    q = request.args.get('q')
+    if q:
+        return jsonify(query(q))
+    else:
+        return jsonify([])
 
 
 if __name__ == "__main__":
