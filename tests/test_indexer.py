@@ -1,10 +1,9 @@
-from sqlalchemy.engine import create_engine
-from sqlalchemy.orm import sessionmaker
 from indexer import add_to_index
-from db.models import Base, Page, Location, Word
+from db.models import Page, Location, Word
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 from setup.session import get_testing_session
+
 
 class TestIndexerData(unittest.TestCase):
     @patch('indexer.get_session')
@@ -27,7 +26,8 @@ class TestIndexerData(unittest.TestCase):
         self.assertEqual(page.description, description)
 
         # correct amount of locations
-        locations = mock_session.query(Location).filter_by(page_id = page.id).all()
+        locations = mock_session.query(
+            Location).filter_by(page_id=page.id).all()
         self.assertEqual(len(locations), 4)
 
         # use existing words when necessary
@@ -36,6 +36,7 @@ class TestIndexerData(unittest.TestCase):
         # clear up stale locations
         old_locations = locations
         add_to_index(url, title, text, description)
-        locations = mock_session.query(Location).filter_by(page_id = page.id).all()
+        locations = mock_session.query(
+            Location).filter_by(page_id=page.id).all()
         for new_location in locations:
             self.assertNotIn(new_location, old_locations)

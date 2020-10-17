@@ -1,6 +1,6 @@
 from crawler import extract_base, process_urls, scrape_url_for_links, stream_seeds_into_queue
 import unittest
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import patch
 from bs4 import BeautifulSoup
 from collections import deque
 
@@ -20,7 +20,6 @@ class DotDict(dict):
 
 class TestCrawlerMethods(unittest.TestCase):
     def test_extract_base_url(self):
-
         url = 'https://www.duolingo.com/'
 
         expected = {
@@ -36,7 +35,6 @@ class TestCrawlerMethods(unittest.TestCase):
         self.assertEqual(actual['path'], expected['path'])
 
     def test_scrape_url_for_links(self):
-
         url = 'https://www.testcase.com/'
         with open('tests/data/test.html', 'r', encoding='utf-8') as stream:
             html_doc = stream.read()
@@ -55,7 +53,6 @@ class TestCrawlerMethods(unittest.TestCase):
 
     @patch('crawler.process_urls')
     def test_stream_seeds_into_queue(self, mock_process_urls):
-
         test_yaml = 'tests/data/test.yaml'
         test_yaml_urls = deque(
             ['https://facebook.com', 'https://google.com', 'https://www.test.com'])
