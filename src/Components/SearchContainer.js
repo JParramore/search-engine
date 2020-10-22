@@ -3,9 +3,10 @@ import 'antd/dist/antd.css';
 import '../index.css';
 import { Input, List, } from 'antd';
 
-const Search = () => {
+const SearchContainer = () => {
     const [results, setResults] = useState([])
-    const { Search } = Input;
+
+    const { Search } = Input
 
     const handleInputChange = (e) => {
         const keyWords = e.target.value
@@ -18,11 +19,13 @@ const Search = () => {
     }
 
     return <div><Search
+        className="search-box"
         placeholder="input search text"
         onSearch={value => console.log(value)}
         onChange={handleInputChange}
         enterButton />
         <List
+            className="res-list"
             itemLayout="vertical"
             size="small"
             locale={{ emptyText: '...' }}
@@ -53,4 +56,4 @@ const Search = () => {
     </div>
 }
 
-export default Search;
+export default SearchContainer;

@@ -1,11 +1,12 @@
 import React from 'react';
 import './App.css';
-import Search from './Components/Search';
+import SearchContainer from './Components/SearchContainer';
 
 function App() {
+
   // fetch('/search').then(res => res.text()).then(text => console.log(text))
   return (
-        <Search />
+    <SearchContainer />
   );
 }
 
