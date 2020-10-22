@@ -1,8 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom'
-import { render, screen, act } from '@testing-library/react';
 import SearchContainer from '../SearchContainer'
-import { shallow, configure, mount } from 'enzyme';
+import { shallow, configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 configure({ adapter: new Adapter() });
