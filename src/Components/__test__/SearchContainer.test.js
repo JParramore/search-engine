@@ -33,6 +33,5 @@ it('onChange of search makes api request with value', () => {
   };
 
   wrapper.find('Search').simulate('change', event);
-
   expect(fetch).toBeCalledWith(`/search?${new URLSearchParams({ q: event.target.value })}`);
 })
