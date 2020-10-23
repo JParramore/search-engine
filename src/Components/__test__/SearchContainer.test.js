@@ -25,10 +25,6 @@ global.fetch = jest.fn(() => Promise.resolve({
 })
 )
 
-beforeEach(() => {
-  fetch.mockClear();
-});
-
 it('onChange of search makes api request with value', () => {
   let wrapper = shallow(<SearchContainer />);
 
