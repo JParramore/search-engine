@@ -14,17 +14,16 @@ def add_to_index(url, title, text, description):
 
     existing_page = page_service.find(url=url)
     if existing_page:
-        # we've seen this page before, keep it up to date by:
-        # removing its locations
+        # seen this page before? keep it up to date by removing its locations
         location_service.clean_up(existing_page)
         location_service.save()
         page = existing_page
     else:
         page = page_service.new(url=url, title=title, description=description)
 
-    for index, stem in enumerate(text.split()):
+    for index, stem in enumerate(text.lower().split()):
         word = word_service.find(stem=stem)
         if not word:
             word = word_service.new(stem=stem)
-        location = location_service.new(page=page, word=word, position=index)
+        location_service.new(page=page, word=word, position=index)
     page_service.save()
