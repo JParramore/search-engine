@@ -1,4 +1,4 @@
-from crawler import extract_base, process_urls, scrape_url_for_links, stream_seeds_into_queue
+from crawler import extract_base, process_website, scrape_url_for_links, stream_seeds_into_queue
 import unittest
 from unittest.mock import patch
 from bs4 import BeautifulSoup
@@ -51,18 +51,20 @@ class TestCrawlerMethods(unittest.TestCase):
 
         self.assertCountEqual(actual_internal_urls, expected_internal_urls)
 
-    @patch('crawler.process_urls')
-    def test_stream_seeds_into_queue(self, mock_process_urls):
+    @patch('crawler.process_website')
+    def test_stream_seeds_into_queue(self, mock_process_website):
         test_yaml = 'tests/data/test.yaml'
-        test_yaml_urls = deque(
-            ['https://facebook.com', 'https://google.com', 'https://www.test.com'])
+        test_yaml_urls = ['https://facebook.com',
+                          'https://google.com',
+                          'https://www.test.com']
         stream_seeds_into_queue(test_yaml)
-        mock_process_urls.assert_called_with(test_yaml_urls)
+        for test_url in test_yaml_urls:
+            mock_process_website.assert_any_call(test_url)
 
     @patch('crawler.requests')
     @patch('crawler.add_to_index')
-    def test_process_urls(self, add_to_index, mock_requests):
-        test_urls = deque(['https://example.org'])
+    def test_process_website(self, add_to_index, mock_requests):
+        test_url = 'https://example.org'
         mock_requests.get.return_value = DotDict({"text": "<html></html>"})
-        process_urls(test_urls)
+        process_website(test_url)
         mock_requests.get.assert_called_once_with('https://example.org')

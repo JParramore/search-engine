@@ -2,9 +2,9 @@ from bs4 import BeautifulSoup
 import requests
 import requests.exceptions
 from urllib.parse import urlsplit
-from collections import deque
 import yaml
 from indexer import add_to_index
+from multiprocessing.dummy import Pool as ThreadPool
 
 DO_NOT_CRAWL_TYPES = set(['.pdf', '.doc', '.xls', '.ppt', '.mp3' '.m4v' '.avi' '.mpg' '.rss',
                           '.xml', '.json', '.txt', '.git', '.zip', '.md5', '.asc', '.jpg', '.gif', '.png'])
@@ -13,19 +13,18 @@ SEED_PATH = "seed.yaml"
 
 
 def stream_seeds_into_queue(seed_path):
-    seed_urls = deque([])
     with open(seed_path, 'r') as stream:
-        seeds = yaml.safe_load(stream)['seed-urls']
-        [seed_urls.append(url) for url in seeds]
-        process_urls(seed_urls)
+        seeds_urls = yaml.safe_load(stream)['seed-urls']
+        with ThreadPool(8) as p:
+            p.map(process_website, seeds_urls)
 
 
-# process urls one by one until we exhaust the queue
-def process_urls(urls):
+def process_website(start_url):
+    urls = [start_url]
     visited_urls = set()
 
     while len(urls):
-        url = urls.popleft()
+        url = urls.pop()
         visited_urls.add(url)
         print(f'Processing {url}')
         try:
@@ -34,7 +33,8 @@ def process_urls(urls):
             continue
 
         soup = BeautifulSoup(response.text, 'lxml')
-        add_to_index(url, get_title(soup), soup.get_text(), get_description(soup))
+        add_to_index(url, get_title(soup), soup.get_text(),
+                     get_description(soup))
         base_obj = extract_base(url)
 
         for url in scrape_url_for_links(base_obj, soup):
