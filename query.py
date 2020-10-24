@@ -1,4 +1,4 @@
-from db.services import PageService, LocationService, WordService
+from db.services import LocationService, WordService
 from db.session import get_session
 
 
