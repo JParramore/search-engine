@@ -27,3 +27,4 @@ def add_to_index(url, title, text, description):
             word = word_service.new(stem=stem)
         location_service.new(page=page, word=word, position=index)
     page_service.save()
+    session.close()
