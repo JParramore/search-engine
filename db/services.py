@@ -68,10 +68,12 @@ class LocationService(ModelServiceBase):
         '''
         What is the sum of distances between each keyword in order?
         '''
-        distance = 0 
+        distance = 0
         for word, next_word in zip(words, words[1:]):
-            position = self.session.query(self.model).filter_by(page=page, word=word).order_by(self.model.position).first().position
-            next_position = self.session.query(self.model).filter_by(page=page, word=next_word).order_by(self.model.position).first().position
+            position = self.session.query(self.model).filter_by(
+                page=page, word=word).order_by(self.model.position).first().position
+            next_position = self.session.query(self.model).filter_by(
+                page=page, word=next_word).order_by(self.model.position).first().position
             if position and next_position:
                 distance += abs(position - next_position)
         return distance
