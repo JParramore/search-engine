@@ -66,12 +66,11 @@ class LocationService(ModelServiceBase):
 
     def distance_between_words(self, words, page):
         '''
-        
+        TODO
         '''
         distance = sys.maxsize
-        # locations = self.session.query(self.model).filter(
-        #     self.model.page == page
-        # ).filter(self.model.word == word).order_by(self.model.position).all()
+
+        # TODO
 
         return distance
 
