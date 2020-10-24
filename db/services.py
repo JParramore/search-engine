@@ -1,3 +1,4 @@
+import sys
 from db.models import Page, Location, Word
 
 
@@ -34,6 +35,44 @@ class LocationService(ModelServiceBase):
         # TODO: can this cause dangling words?
         self.session.query(self.model).filter(
             self.model.page_id == page.id).delete()
+
+    def words_on_page(self, words, page):
+        '''
+        How many combined instances of the key words are on a page?
+        '''
+        count = 0
+        for word in words:
+            count += len(
+                self.session.query(self.model).filter(
+                    self.model.page == page
+                ).filter(self.model.word == word).all()
+            )
+        return count
+
+    def highest_position_of_word(self, words, page):
+        '''
+        What is the highest position on a page of any of these key words?
+        (0 is the highest)
+        '''
+        highest_position = sys.maxsize
+        for word in words:
+            locations = [location.position for location in
+                         self.session.query(self.model).filter(
+                             self.model.page == page
+                         ).filter(self.model.word == word).all()]
+            if locations:
+                highest_position = min(locations)
+        return highest_position
+
+    def distance_between_words(self, words, page):
+        '''
+        TODO
+        '''
+        distance = sys.maxsize
+
+        # TODO
+
+        return distance
 
 
 class WordService(ModelServiceBase):
