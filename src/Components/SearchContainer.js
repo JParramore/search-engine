@@ -24,7 +24,7 @@ const SearchContainer = () => {
         onChange={handleInputChange}
         enterButton
         size="large" />
-        <Text className="height-20" type="secondary">{data.stats}</Text>
+        <Text type="secondary">{data.stats}</Text>
         <List
             className="res-list"
             itemLayout="vertical"
