@@ -1,11 +1,18 @@
 import React from 'react';
-import './App.css';
+import { Row, Col, Divider } from 'antd';
 import SearchContainer from './Components/SearchContainer';
 
 function App() {
 
   return (
-    <SearchContainer />
+    <>
+      <Divider orientation="left">search-engine</Divider>
+      <Row justify="center" align="middle">
+        <Col span={16}>
+          <SearchContainer />
+        </Col>
+      </Row>
+    </>
   );
 }
 

@@ -1,3 +1,4 @@
+import time
 from flask import Flask, request, jsonify, render_template
 from query import query
 app = Flask(__name__,
@@ -15,7 +16,16 @@ def index():
 def search():
     q = request.args.get('q')
     if q:
-        return jsonify(query(q))
+        start = time.time()
+        results = query(q.lower())
+        t = (time.time() - start) / 1000
+        t = f'{t/1000:.4}' if t > 0.0001 else '~0'
+        return jsonify(
+            {
+                'results': results,
+                'stats': f'{len(results)} results found in {t}ms'
+            }
+        )
     else:
         return jsonify([])
 
