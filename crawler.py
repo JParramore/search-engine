@@ -4,35 +4,45 @@ import requests.exceptions
 from urllib.parse import urlsplit
 import yaml
 from indexer import add_to_index
-from multiprocessing.dummy import Pool as ThreadPool
 
-DO_NOT_CRAWL_TYPES = set(['.pdf', '.doc', '.xls', '.ppt', '.mp3' '.m4v' '.avi' '.mpg' '.rss',
-                          '.xml', '.json', '.txt', '.git', '.zip', '.md5', '.asc', '.jpg', '.gif', '.png'])
+DO_NOT_CRAWL_TYPES = set(['.pdf', '.doc', '.xls', '.ppt', '.mp3', '.m4v',
+                          '.avi', '.mpg', '.rss', '.xml', '.json', '.txt',
+                          '.git', '.zip', '.md5', '.asc', '.jpg', '.gif',
+                          '.png'])
 
 SEED_PATH = "seed.yaml"
+MAX_REQUESTS = 10
 
 
 def stream_seeds_into_queue(seed_path):
     with open(seed_path, 'r') as stream:
-        seeds_urls = yaml.safe_load(stream)['seed-urls']
-        with ThreadPool(8) as p:
-            p.map(process_website, seeds_urls)
+        for seed_url in yaml.safe_load(stream)['seed-urls']:
+            process_website(seed_url)
 
 
 def process_website(start_url):
     urls = [start_url]
     visited_urls = set()
 
+    count = 0
     while len(urls):
+        count += 1
+        if count > MAX_REQUESTS:
+            break
+
         url = urls.pop()
         visited_urls.add(url)
-        print(f'Processing {url}')
+        print(f'Processing: {url}')
         try:
             response = requests.get(url)
-        except(requests.exceptions.MissingSchema, requests.exceptions.ConnectionError, requests.exceptions.InvalidURL, requests.exceptions.InvalidSchema):
+            if response.status_code >= 400:
+                continue
+        except Exception as e:
+            print(f'Request error for {url} - {e}')
             continue
 
         soup = BeautifulSoup(response.text, 'lxml')
+
         add_to_index(url, get_title(soup), soup.get_text(),
                      get_description(soup))
         base_obj = extract_base(url)

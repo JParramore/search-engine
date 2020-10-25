@@ -1,10 +1,10 @@
 from sqlalchemy.engine import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm import sessionmaker
 
 
 def get_session():
     from config import db
-    engine = create_engine(db) # for verbose: echo=True
-    session_factory = sessionmaker(bind=engine)
-    Session = scoped_session(session_factory)
+    # for verbose: echo=True
+    engine = create_engine(db)
+    Session = sessionmaker(bind=engine)
     return Session()
