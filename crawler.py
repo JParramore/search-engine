@@ -1,3 +1,5 @@
+import asyncio
+from functools import wraps
 from bs4 import BeautifulSoup
 import requests
 import requests.exceptions
@@ -12,6 +14,22 @@ DO_NOT_CRAWL_TYPES = set(['.pdf', '.doc', '.xls', '.ppt', '.mp3', '.m4v',
 
 SEED_PATH = "seed.yaml"
 MAX_REQUESTS = 10
+
+
+def background(f):
+    '''
+    https://stackoverflow.com/a/53256058
+    allow functions to be 'fired and forgotten
+    '''
+
+    @wraps(f)
+    def wrapped(*args, **kwargs):
+        loop = asyncio.get_event_loop()
+        if callable(f):
+            return loop.run_in_executor(None, f, *args, **kwargs)
+        else:
+            raise TypeError('Task must be a callable')
+    return wrapped
 
 
 def stream_seeds_into_queue(seed_path):
@@ -43,8 +61,9 @@ def process_website(start_url):
 
         soup = BeautifulSoup(response.text, 'lxml')
 
-        add_to_index(url, get_title(soup), soup.get_text(),
-                     get_description(soup))
+        index_and_forget = background(add_to_index)
+        index_and_forget(url, get_title(soup), soup.get_text(),
+                         get_description(soup))
         base_obj = extract_base(url)
 
         for url in scrape_url_for_links(base_obj, soup):

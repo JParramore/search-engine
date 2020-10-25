@@ -1,9 +1,8 @@
 --- 
  seed-urls: 
-    - 'https://blog.acolyer.org'
-    - 'https://jvns.ca'
-    - 'https://stratechery.com'
-    - 'https://blog.cloudflare.com'
-    - 'https://latacora.singles'
-    - 'https://www.schneier.com'
-    - 'https://www.ben-evans.com'
+    - 'https://bellard.org'
+    - 'https://www.linusakesson.net'
+    - 'http://cat-v.org'
+    - 'https://flak.tedunangst.com'
+    - 'http://www.oilshell.org/blog'
+    - 'https://gustedt.wordpress.com'
