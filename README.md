@@ -6,13 +6,13 @@
 Ubtuntu 20.04 installation:
 
 ```bash
-sudo apt update
-sudo apt install python3-pip
-sudo apt install gunicorn
 sudo ufw enable
 sudo ufw allow 8080
-
-bash install.sh
+sudo apt update
+sudo apt install gunicorn
+sudo apt install python3-pip
+pip3 install -r requirements.txt
+bash setup.sh
 ```
 
 Run:
