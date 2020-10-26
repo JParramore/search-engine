@@ -3,3 +3,7 @@
 
 # search-engine
 
+```bash
+sudo ufw allow 80
+bash start.sh
+```

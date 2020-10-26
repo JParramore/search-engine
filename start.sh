@@ -1,5 +1,5 @@
-pip install -r requirements.txt
-python crawler.py
+pip3 install -r requirements.txt
+python3 crawler.py
 npm install
 npm run build
-gunicorn --bind 0.0.0.0:8080 --workers 4 server:app
+gunicorn --bind 0.0.0.0:80 --workers 4 server:app
