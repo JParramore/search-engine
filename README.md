@@ -3,7 +3,19 @@
 
 # search-engine
 
+Ubtuntu 20.04 installation:
+
 ```bash
+sudo apt update
+sudo apt install python3-pip
+sudo ufw enable
 sudo ufw allow 80
+
+bash install.sh
+```
+
+Run:
+
+```bash
 bash start.sh
 ```
