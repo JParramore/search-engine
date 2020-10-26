@@ -12,7 +12,7 @@ DO_NOT_CRAWL_TYPES = set(['.pdf', '.doc', '.xls', '.ppt', '.mp3', '.m4v',
                           '.git', '.zip', '.md5', '.asc', '.jpg', '.gif',
                           '.png'])
 
-SEED_PATH = "seed.yaml"
+SEED_PATH = "db/seed.yaml"
 MAX_REQUESTS = 10
 
 

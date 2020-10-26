@@ -1,4 +1,6 @@
 db.sqlite
+db.sqlite-journal
+package-lock.json
 
 # dependencies
 /node_modules

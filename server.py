@@ -18,9 +18,11 @@ def search():
     if q:
         start = time.time()
         results = query(q.lower())
-        t = (time.time() - start)
+        t = (time.time() - start) / 1000
         if len(results) > 0:
-            stats = f'{len(results)} results found in {t/1000:.3f}ms'
+            if t < 0.0001:
+                t = 0.0001
+            stats = f'{len(results)} results found in {t:.4f}ms'
         else:
             stats = '0 results found.'
         return jsonify(
