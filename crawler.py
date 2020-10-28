@@ -11,7 +11,7 @@ DO_NOT_CRAWL_TYPES = set(['.pdf', '.doc', '.xls', '.ppt', '.mp3', '.m4v',
                           '.png'])
 
 SEED_PATH = "db/seed.yaml"
-MAX_REQUESTS = 10
+MAX_REQUESTS = 100
 
 
 def stream_seeds_into_queue(seed_path):

@@ -15,7 +15,7 @@ class TestIndexerData(unittest.TestCase):
         title = 'Google'
         text = 'apple banana orange apple'
         description = 'Some description.'
-        add_to_index(url, title, text, description)
+        add_to_index.__wrapped__(url, title, text, description)
 
         page = mock_session.query(Page).first()
         words = mock_session.query(Word).all()
@@ -35,7 +35,7 @@ class TestIndexerData(unittest.TestCase):
 
         # clear up stale locations
         old_locations = locations
-        add_to_index(url, title, text, description)
+        add_to_index.__wrapped__(url, title, text, description)
         locations = mock_session.query(
             Location).filter_by(page_id=page.id).all()
         for new_location in locations:
