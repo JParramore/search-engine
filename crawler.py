@@ -8,7 +8,8 @@ from indexer import add_to_index
 DO_NOT_CRAWL_TYPES = set(['.pdf', '.doc', '.xls', '.ppt', '.mp3', '.m4v',
                           '.avi', '.mpg', '.rss', '.xml', '.json', '.txt',
                           '.git', '.zip', '.md5', '.asc', '.jpg', '.gif',
-                          '.png'])
+                          '.png', 'r.gz', 'r.xz', 'jpeg', '.iso', 'm.gz', 
+                          '.bpg', '.tgz'])
 
 SEED_PATH = "db/seed.yaml"
 MAX_REQUESTS = 100
